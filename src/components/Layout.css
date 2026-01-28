@@ -1,0 +1,279 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 250px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar.closed {
+  width: 70px;
+}
+
+.sidebar-header {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #374151;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-logo {
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  object-fit: contain;
+}
+
+.default-logo {
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  margin: 0;
+  white-space: nowrap;
+}
+
+.sidebar.closed .sidebar-header h2 {
+  display: none;
+}
+
+.toggle-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-selector {
+  padding: 15px;
+  border-bottom: 1px solid #374151;
+  position: relative;
+}
+
+.project-dropdown-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #374151;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-dropdown-btn:hover {
+  background-color: #4b5563;
+}
+
+.project-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 15px;
+  right: 15px;
+  background-color: #374151;
+  border-radius: 5px;
+  margin-top: 5px;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.project-item {
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.project-item:hover {
+  background-color: #4b5563;
+}
+
+.project-item.active {
+  background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+}
+
+.project-role {
+  font-size: 12px;
+  opacity: 0.7;
+  text-transform: capitalize;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  color: #d1d5db;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+  background-color: #374151;
+  color: white;
+}
+
+.nav-item.active {
+  background: linear-gradient(90deg, #0ea5e9, #3b82f6);
+  color: white;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.nav-icon {
+  font-size: 20px;
+  min-width: 20px;
+}
+
+.sidebar:not(.closed) .nav-item span {
+  margin-left: 15px;
+}
+
+.sidebar.closed .nav-item span {
+  display: none;
+}
+
+.sidebar-footer {
+  padding: 20px;
+  border-top: 1px solid #374151;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #374151;
+}
+
+.sidebar.closed .logout-btn span {
+  display: none;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.top-header {
+  background: linear-gradient(90deg, #ffffff 0%, #f0f9ff 100%);
+  padding: 15px 30px;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid rgba(14, 165, 233, 0.1);
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #374151;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-name {
+  font-weight: 500;
+  color: #374151;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.page-content {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+  }
+
+  .sidebar.open {
+    left: 0;
+  }
+
+  .sidebar.closed {
+    left: -70px;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  .main-content {
+    width: 100%;
+  }
+
+  .page-content {
+    padding: 15px;
+  }
+}
