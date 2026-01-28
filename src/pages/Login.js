@@ -7,7 +7,7 @@ import './Auth.css';
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
 
   const [formData, setFormData] = useState({
     email: '',
@@ -15,12 +15,11 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (isAuthenticated) {
-      // Fetch full user data with populated activeProject
-      dispatch(getMe());
-      navigate('/dashboard');
+    // If already authenticated with valid user, redirect to dashboard
+    if (isAuthenticated && user) {
+      navigate('/dashboard', { replace: true });
     }
-  }, [isAuthenticated, navigate, dispatch]);
+  }, [isAuthenticated, user, navigate]);
 
   useEffect(() => {
     return () => {

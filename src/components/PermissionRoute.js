@@ -1,8 +1,14 @@
 import React from 'react';
+import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const PermissionRoute = React.memo(({ children, permission, adminOnly = false }) => {
   const { user } = useSelector((state) => state.auth);
+
+  // If no user, redirect to login (safety check)
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
 
   // Admin has access to everything
   if (user?.role === 'admin') {
