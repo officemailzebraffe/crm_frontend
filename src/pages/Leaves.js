@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../utils/api';
-import { FiCalendar, FiPlus, FiCheck, FiX, FiClock, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiCalendar, FiPlus, FiCheck, FiX, FiTrash2 } from 'react-icons/fi';
 import '../pages/Auth.css';
 
 const Leaves = () => {

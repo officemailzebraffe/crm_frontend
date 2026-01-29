@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import api from '../utils/api';
 import { FiClock, FiCheck, FiCalendar, FiUser, FiFilter } from 'react-icons/fi';
@@ -19,12 +19,7 @@ const Attendance = () => {
     userId: user?.role === 'admin' || user?.role === 'hr_manager' ? '' : user?._id
   });
 
-  useEffect(() => {
-    fetchAttendance();
-    fetchSummary();
-  }, [filters]);
-
-  const fetchAttendance = async () => {
+  const fetchAttendance = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (filters.month) params.append('month', filters.month);
@@ -48,9 +43,9 @@ const Attendance = () => {
       setError(error.response?.data?.message || 'Failed to load attendance records');
       setLoading(false);
     }
-  };
+  }, [filters.month, filters.year, filters.userId, user._id]);
 
-  const fetchSummary = async () => {
+  const fetchSummary = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (filters.month) params.append('month', filters.month);
@@ -62,7 +57,12 @@ const Attendance = () => {
     } catch (error) {
       console.error('Error fetching summary:', error);
     }
-  };
+  }, [filters.month, filters.year, filters.userId]);
+
+  useEffect(() => {
+    fetchAttendance();
+    fetchSummary();
+  }, [fetchAttendance, fetchSummary]);
 
   const handleCheckIn = async () => {
     try {
