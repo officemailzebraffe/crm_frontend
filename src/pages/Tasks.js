@@ -10,6 +10,7 @@ const Tasks = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingTask, setEditingTask] = useState(null);
+  const [tooltipTask, setTooltipTask] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -91,6 +92,8 @@ const Tasks = () => {
         fetchTasks();
       } catch (error) {
         console.error('Error deleting task:', error);
+        const errorMessage = error.response?.data?.error || 'Failed to delete task';
+        alert(errorMessage);
       }
     }
   };
@@ -101,6 +104,8 @@ const Tasks = () => {
       fetchTasks();
     } catch (error) {
       console.error('Error updating task status:', error);
+      const errorMessage = error.response?.data?.error || 'Failed to update task status';
+      alert(errorMessage);
     }
   };
 
@@ -124,6 +129,39 @@ const Tasks = () => {
       low: '#10b981'
     };
     return colors[priority] || '#6b7280';
+  };
+
+  const getLastStatusChanger = (task) => {
+    if (!task.statusHistory || task.statusHistory.length === 0) {
+      return null;
+    }
+    const lastEntry = task.statusHistory[task.statusHistory.length - 1];
+    return lastEntry.changedBy;
+  };
+
+  const formatStatusHistory = (history) => {
+    if (!history || history.length === 0) return [];
+    return history.map((entry, index) => ({
+      ...entry,
+      displayDate: new Date(entry.changedAt).toLocaleString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      })
+    }));
+  };
+
+  const getStatusLabel = (status) => {
+    const labels = {
+      'pending': 'Pending',
+      'in_progress': 'In Progress',
+      'in-progress': 'In Progress',
+      'completed': 'Completed',
+      'cancelled': 'Cancelled'
+    };
+    return labels[status] || status;
   };
 
   const groupedTasks = {
@@ -179,6 +217,45 @@ const Tasks = () => {
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: getPriorityColor(task.priority), marginLeft: '8px', marginTop: '4px' }}></div>
                   </div>
                   {task.description && <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>{task.description.substring(0, 60)}...</p>}
+                  {task.assignedTo && (
+                    <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '6px' }}>
+                      <strong>Assigned to:</strong> {task.assignedTo.name}
+                    </div>
+                  )}
+                  {getLastStatusChanger(task) && (
+                    <div 
+                      style={{ fontSize: '11px', color: '#6b7280', marginBottom: '6px', cursor: 'pointer', position: 'relative' }}
+                      onMouseEnter={() => setTooltipTask(task._id)}
+                      onMouseLeave={() => setTooltipTask(null)}
+                    >
+                      <strong>Status by:</strong> {getLastStatusChanger(task).name}
+                      {tooltipTask === task._id && task.statusHistory && task.statusHistory.length > 0 && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: '0',
+                          background: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          minWidth: '200px',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                          marginBottom: '5px'
+                        }}>
+                          <div style={{ fontWeight: 'bold', marginBottom: '6px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>Status History</div>
+                          {formatStatusHistory(task.statusHistory).reverse().map((entry, idx) => (
+                            <div key={idx} style={{ marginBottom: '4px', paddingBottom: '4px', borderBottom: idx < task.statusHistory.length - 1 ? '1px solid #374151' : 'none' }}>
+                              <div style={{ color: '#10b981' }}>{getStatusLabel(entry.status)}</div>
+                              <div style={{ color: '#9ca3af', fontSize: '10px' }}>{entry.changedBy?.name || 'Unknown'}</div>
+                              <div style={{ color: '#6b7280', fontSize: '9px' }}>{entry.displayDate}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#6b7280', marginBottom: '10px' }}>
                     <FiClock />
                     <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No deadline'}</span>
@@ -208,6 +285,45 @@ const Tasks = () => {
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: getPriorityColor(task.priority), marginLeft: '8px', marginTop: '4px' }}></div>
                   </div>
                   {task.description && <p style={{ fontSize: '12px', color: '#6b7280', marginBottom: '8px' }}>{task.description.substring(0, 60)}...</p>}
+                  {task.assignedTo && (
+                    <div style={{ fontSize: '11px', color: '#6b7280', marginBottom: '6px' }}>
+                      <strong>Assigned to:</strong> {task.assignedTo.name}
+                    </div>
+                  )}
+                  {getLastStatusChanger(task) && (
+                    <div 
+                      style={{ fontSize: '11px', color: '#0ea5e9', marginBottom: '6px', fontWeight: '500', cursor: 'pointer', position: 'relative' }}
+                      onMouseEnter={() => setTooltipTask(task._id)}
+                      onMouseLeave={() => setTooltipTask(null)}
+                    >
+                      <strong>In progress by:</strong> {getLastStatusChanger(task).name}
+                      {tooltipTask === task._id && task.statusHistory && task.statusHistory.length > 0 && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: '0',
+                          background: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          minWidth: '200px',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                          marginBottom: '5px'
+                        }}>
+                          <div style={{ fontWeight: 'bold', marginBottom: '6px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>Status History</div>
+                          {formatStatusHistory(task.statusHistory).reverse().map((entry, idx) => (
+                            <div key={idx} style={{ marginBottom: '4px', paddingBottom: '4px', borderBottom: idx < task.statusHistory.length - 1 ? '1px solid #374151' : 'none' }}>
+                              <div style={{ color: '#10b981' }}>{getStatusLabel(entry.status)}</div>
+                              <div style={{ color: '#9ca3af', fontSize: '10px' }}>{entry.changedBy?.name || 'Unknown'}</div>
+                              <div style={{ color: '#6b7280', fontSize: '9px' }}>{entry.displayDate}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', color: '#6b7280', marginBottom: '10px' }}>
                     <FiClock />
                     <span>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No deadline'}</span>
@@ -237,6 +353,45 @@ const Tasks = () => {
                     <FiCheckCircle style={{ color: '#10b981', marginLeft: '8px' }} />
                   </div>
                   {task.description && <p style={{ fontSize: '12px', color: '#9ca3af', marginBottom: '8px' }}>{task.description.substring(0, 60)}...</p>}
+                  {task.assignedTo && (
+                    <div style={{ fontSize: '11px', color: '#9ca3af', marginBottom: '6px' }}>
+                      <strong>Assigned to:</strong> {task.assignedTo.name}
+                    </div>
+                  )}
+                  {getLastStatusChanger(task) && (
+                    <div 
+                      style={{ fontSize: '11px', color: '#10b981', marginBottom: '6px', fontWeight: '500', cursor: 'pointer', position: 'relative' }}
+                      onMouseEnter={() => setTooltipTask(task._id)}
+                      onMouseLeave={() => setTooltipTask(null)}
+                    >
+                      <strong>Completed by:</strong> {getLastStatusChanger(task).name}
+                      {tooltipTask === task._id && task.statusHistory && task.statusHistory.length > 0 && (
+                        <div style={{
+                          position: 'absolute',
+                          bottom: '100%',
+                          left: '0',
+                          background: '#1f2937',
+                          color: 'white',
+                          padding: '8px 12px',
+                          borderRadius: '6px',
+                          fontSize: '11px',
+                          minWidth: '200px',
+                          zIndex: 1000,
+                          boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+                          marginBottom: '5px'
+                        }}>
+                          <div style={{ fontWeight: 'bold', marginBottom: '6px', borderBottom: '1px solid #374151', paddingBottom: '4px' }}>Status History</div>
+                          {formatStatusHistory(task.statusHistory).reverse().map((entry, idx) => (
+                            <div key={idx} style={{ marginBottom: '4px', paddingBottom: '4px', borderBottom: idx < task.statusHistory.length - 1 ? '1px solid #374151' : 'none' }}>
+                              <div style={{ color: '#10b981' }}>{getStatusLabel(entry.status)}</div>
+                              <div style={{ color: '#9ca3af', fontSize: '10px' }}>{entry.changedBy?.name || 'Unknown'}</div>
+                              <div style={{ color: '#6b7280', fontSize: '9px' }}>{entry.displayDate}</div>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
                   <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
                     {canEdit && <button className="btn btn-secondary" style={{ fontSize: '11px', padding: '4px 8px' }} onClick={() => openEditModal(task)}><FiEdit /></button>}
                     {canDelete && <button className="btn btn-danger" style={{ fontSize: '11px', padding: '4px 8px' }} onClick={() => deleteTask(task._id)}><FiTrash /></button>}
