@@ -59,11 +59,11 @@ const Layout = React.memo(() => {
           <div className="logo-container">
             <Logo 
               src="/logo.png" 
-              alt="CRM Portal Logo" 
+              alt="EMS Portal Logo" 
               className="sidebar-logo"
-              style={{ width: siEMSarOpen ? '40px' : '32px', height: sidebarOpen ? '40px' : '32px' }}
+              style={{ width: sidebarOpen ? '40px' : '32px', height: sidebarOpen ? '40px' : '32px' }}
             />
-            {sidebarOpen && <h2>CRM Portal</h2>}
+            {sidebarOpen && <h2>EMS Portal</h2>}
           </div>
           <button
             className="toggle-btn"
