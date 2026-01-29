@@ -17,6 +17,8 @@ import Analytics from './pages/Analytics';
 import Projects from './pages/Projects';
 import Settings from './pages/Settings';
 import AdminDashboard from './pages/AdminDashboard';
+import Attendance from './pages/Attendance';
+import Leaves from './pages/Leaves';
 
 // Components
 import Layout from './components/Layout';
@@ -54,6 +56,16 @@ function AppContent() {
           <Route path="admin" element={
             <PermissionRoute adminOnly={true}>
               <AdminDashboard />
+            </PermissionRoute>
+          } />
+          <Route path="attendance" element={
+            <PermissionRoute permission="attendance">
+              <Attendance />
+            </PermissionRoute>
+          } />
+          <Route path="leaves" element={
+            <PermissionRoute permission="leaves">
+              <Leaves />
             </PermissionRoute>
           } />
           <Route path="leads" element={

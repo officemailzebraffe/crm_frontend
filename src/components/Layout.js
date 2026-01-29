@@ -2,7 +2,7 @@ import React, { useState, useMemo, useCallback } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, switchProject } from '../redux/slices/authSlice';
-import { FiHome, FiUsers, FiUserCheck, FiBookOpen, FiCheckSquare, FiBarChart2, FiBriefcase, FiSettings, FiLogOut, FiMenu, FiX, FiShield } from 'react-icons/fi';
+import { FiHome, FiUsers, FiUserCheck, FiBookOpen, FiCheckSquare, FiBarChart2, FiBriefcase, FiSettings, FiLogOut, FiMenu, FiX, FiShield, FiClock, FiCalendar } from 'react-icons/fi';
 import Logo from './Logo';
 import './Layout.css';
 
@@ -25,10 +25,12 @@ const Layout = React.memo(() => {
 
   const menuItems = useMemo(() => [
     { path: '/dashboard', icon: FiHome, label: 'Dashboard', permission: 'dashboard' },
-    { path: '/admin', icon: FiShield, label: 'Admin Panel', permission: 'admin', adminOnly: true },
-    { path: '/leads', icon: FiUsers, label: 'Prospects', permission: 'leads' },
-    { path: '/students', icon: FiUserCheck, label: 'Employees', permission: 'students' },
-    { path: '/courses', icon: FiBookOpen, label: 'Trainings', permission: 'courses' },
+    { path: '/admin', icon: FiShield, label: 'Employees', permission: 'employees', adminOnly: true },
+    { path: '/attendance', icon: FiClock, label: 'Attendance', permission: 'attendance' },
+    { path: '/leaves', icon: FiCalendar, label: 'Leaves', permission: 'leaves' },
+    { path: '/leads', icon: FiUsers, label: 'Leads', permission: 'leads' },
+    { path: '/students', icon: FiUserCheck, label: 'Students', permission: 'students' },
+    { path: '/courses', icon: FiBookOpen, label: 'Courses', permission: 'courses' },
     { path: '/tasks', icon: FiCheckSquare, label: 'Tasks', permission: 'tasks' },
     { path: '/analytics', icon: FiBarChart2, label: 'Analytics', permission: 'analytics' },
     { path: '/projects', icon: FiBriefcase, label: 'Projects', permission: 'projects' },
@@ -59,7 +61,7 @@ const Layout = React.memo(() => {
               src="/logo.png" 
               alt="CRM Portal Logo" 
               className="sidebar-logo"
-              style={{ width: sidebarOpen ? '40px' : '32px', height: sidebarOpen ? '40px' : '32px' }}
+              style={{ width: siEMSarOpen ? '40px' : '32px', height: sidebarOpen ? '40px' : '32px' }}
             />
             {sidebarOpen && <h2>CRM Portal</h2>}
           </div>

@@ -18,13 +18,16 @@ const AdminDashboard = () => {
     phone: '',
     role: 'employee',
     permissions: {
-      dashboard: true,
+      employees: false,
+      dashboard: false,
       leads: false,
       students: false,
       courses: false,
       tasks: false,
       analytics: false,
       projects: false,
+      attendance: false,
+      leaves: false,
       settings: false
     }
   });
@@ -200,13 +203,16 @@ const AdminDashboard = () => {
   }
 
   const permissionLabels = {
+    employees: 'Employees',
     dashboard: 'Dashboard',
-    leads: 'Leads Management',
-    students: 'Employees Management',
-    courses: 'Courses Management',
-    tasks: 'Tasks Management',
+    leads: 'Leads',
+    students: 'Students',
+    courses: 'Courses',
+    tasks: 'Tasks',
     analytics: 'Analytics',
-    projects: 'Projects Management',
+    projects: 'Projects',
+    attendance: 'Attendance',
+    leaves: 'Leaves',
     settings: 'Settings'
   };
 
@@ -239,6 +245,8 @@ const AdminDashboard = () => {
                 <th style={{ padding: '12px', textAlign: 'left' }}>Name</th>
                 <th style={{ padding: '12px', textAlign: 'left' }}>Email</th>
                 <th style={{ padding: '12px', textAlign: 'left' }}>Role</th>
+                <th style={{ padding: '12px', textAlign: 'left' }}>Department</th>
+                <th style={{ padding: '12px', textAlign: 'left' }}>Designation</th>
                 <th style={{ padding: '12px', textAlign: 'left' }}>Status</th>
                 <th style={{ padding: '12px', textAlign: 'left' }}>Projects</th>
                 <th style={{ padding: '12px', textAlign: 'left' }}>Permissions</th>
@@ -252,9 +260,11 @@ const AdminDashboard = () => {
                   <td style={{ padding: '12px' }}>{employee.email}</td>
                   <td style={{ padding: '12px' }}>
                     <span className={`badge badge-${employee.role === 'admin' ? 'success' : employee.role === 'manager' ? 'warning' : 'info'}`}>
-                      {employee.role}
+                      {employee.role?.replace(/_/g, ' ')}
                     </span>
                   </td>
+                  <td style={{ padding: '12px' }}>{employee.department || 'N/A'}</td>
+                  <td style={{ padding: '12px' }}>{employee.designation || 'N/A'}</td>
                   <td style={{ padding: '12px' }}>
                     <button
                       onClick={() => toggleEmployeeStatus(employee._id, employee.isActive)}
@@ -423,8 +433,74 @@ const AdminDashboard = () => {
                   onChange={handleInputChange}
                 >
                   <option value="employee">Employee</option>
+                  <option value="intern">Intern</option>
+                  <option value="contractor">Contractor</option>
+                  <option value="junior_developer">Junior Developer</option>
+                  <option value="developer">Developer</option>
+                  <option value="senior_developer">Senior Developer</option>
+                  <option value="designer">Designer</option>
+                  <option value="qa_engineer">QA Engineer</option>
+                  <option value="business_analyst">Business Analyst</option>
+                  <option value="team_lead">Team Lead</option>
+                  <option value="project_manager">Project Manager</option>
                   <option value="manager">Manager</option>
+                  <option value="department_head">Department Head</option>
+                  <option value="hr_manager">HR Manager</option>
                   <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Department</label>
+                <select
+                  name="department"
+                  className="form-control"
+                  value={formData.department || ''}
+                  onChange={handleInputChange}
+                >
+                  <option value="">Select Department</option>
+                  <option value="Engineering">Engineering</option>
+                  <option value="Product">Product</option>
+                  <option value="Design">Design</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Sales">Sales</option>
+                  <option value="HR">HR</option>
+                  <option value="Finance">Finance</option>
+                  <option value="Operations">Operations</option>
+                  <option value="Customer Support">Customer Support</option>
+                  <option value="Quality Assurance">Quality Assurance</option>
+                  <option value="DevOps">DevOps</option>
+                  <option value="Data Science">Data Science</option>
+                  <option value="Management">Management</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Designation</label>
+                <input
+                  type="text"
+                  name="designation"
+                  className="form-control"
+                  value={formData.designation || ''}
+                  onChange={handleInputChange}
+                  placeholder="e.g. Software Engineer, Team Lead"
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Employment Type</label>
+                <select
+                  name="employmentType"
+                  className="form-control"
+                  value={formData.employmentType || 'full_time'}
+                  onChange={handleInputChange}
+                >
+                  <option value="full_time">Full Time</option>
+                  <option value="part_time">Part Time</option>
+                  <option value="contract">Contract</option>
+                  <option value="intern">Internship</option>
+                  <option value="freelance">Freelance</option>
                 </select>
               </div>
 
