@@ -170,10 +170,10 @@ const Tasks = () => {
     completed: tasks.filter(t => t.status === 'completed')
   };
 
-  // Check if user can edit/delete/create tasks - only admin has full control
-  const canEdit = user?.role === 'admin';
-  const canDelete = user?.role === 'admin';
-  const canCreate = user?.role === 'admin';
+  // Check if user can edit/delete/create tasks - admin and manager have full control
+  const canEdit = user?.role === 'admin' || user?.role === 'manager';
+  const canDelete = user?.role === 'admin' || user?.role === 'manager';
+  const canCreate = user?.role === 'admin' || user?.role === 'manager';
 
   if (!user?.activeProject) {
     return (
