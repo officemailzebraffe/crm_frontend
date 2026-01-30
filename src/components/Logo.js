@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Logo = ({ src, alt = 'CRM Portal Logo', className = '', style = {} }) => {
+const Logo = ({ src, alt = 'EMS Portal Logo', className = '', style = {} }) => {
   const [imageError, setImageError] = useState(false);
 
   const defaultLogo = (
@@ -16,7 +16,7 @@ const Logo = ({ src, alt = 'CRM Portal Logo', className = '', style = {} }) => {
           fontSize="40"
           fontWeight="bold"
         >
-          CRM
+          EMS
         </text>
       </svg>
     </div>
